@@ -36,7 +36,7 @@ let cvData = {
     website: 'https://juanfigueredo.dev',
     linkedin: 'https://linkedin.com/in/juan-figueredo',
     github: 'https://github.com/juanfigueredo',
-    photoUrl: '/src/assets/images/avatar_tech_lead_1792986076800.jpg',
+    photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=300&h=300&q=80',
     showPhoto: true
   },
   experience: [
@@ -186,7 +186,7 @@ function renderCV() {
   // Sidebar HTML
   const photoHtml = profile.showPhoto && profile.photoUrl
     ? `<div class="cv-photo-wrapper">
-        <img src="${profile.photoUrl}" alt="${profile.name}" class="cv-photo" />
+        <img src="${profile.photoUrl}" alt="${profile.name}" class="cv-photo" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=300&h=300&q=80';" />
       </div>`
     : '';
 
