@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Studio Pro - Sistema de Currículum Vitae Interactivo y PDF</title>
+    <meta name="description" content="Sistema profesional de creación, diseño, mejora de CVs antiguos y exportación directa a PDF ultra-responsivo." />
+    <meta property="og:title" content="CV Studio Pro - Sistema de Currículum Vitae Interactivo y PDF" />
+    <meta property="og:description" content="Sistema profesional de creación, diseño, mejora de CVs antiguos y exportación directa a PDF ultra-responsivo." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts Modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Librería html2pdf.js para exportación directa -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Estilos CSS3 Adaptables y Puros -->
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+
+    <!-- 1. BARRA SUPERIOR -->
+    <header class="topbar no-print">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="#" class="brand-wordmark">
+          CV Studio <span>Pro</span>
+        </a>
+      </div>
+
+      <nav class="nav-controls">
+        <!-- Subir y mejorar CV Antiguo -->
+        <button type="button" class="btn btn-blue" onclick="openModal('modal-upload-cv')" title="Sube un archivo o pega tu CV viejo para mejorarlo automáticamente">
+          🚀 Subir y Mejorar CV
+        </button>
+
+        <!-- Diagnóstico ATS -->
+        <button type="button" class="btn btn-emerald" onclick="openModal('modal-ats')">
+          ✓ Auditoría ATS <span class="badge badge-emerald" id="topbar-ats-score">85/100</span>
+        </button>
+
+        <!-- Estilos y Colores -->
+        <button type="button" class="btn btn-secondary" onclick="openModal('modal-theme')">
+          🎨 Estilos
+        </button>
+
+        <!-- Imprimir A4 -->
+        <button type="button" class="btn btn-secondary" onclick="window.print()">
+          🖨️ Imprimir
+        </button>
+
+        <!-- Descargar PDF -->
+        <button type="button" class="btn btn-primary" id="btn-download-pdf" onclick="downloadPdf()">
+          📥 Descargar PDF
+        </button>
+      </nav>
+    </header>
+
+    <!-- 2. ESPACIO DE TRABAJO (EDITOR + CV A4 SPLIT) -->
+    <div class="workspace-container">
+      
+      <!-- Alternador de Vista para Móviles y Tablets (Ultra-Responsive) -->
+      <div class="mobile-view-toggle no-print">
+        <button type="button" id="btn-view-editor" class="mobile-view-btn active" onclick="switchMobileView('editor')">
+          ✏️ Editar Contenido
+        </button>
+        <button type="button" id="btn-view-preview" class="mobile-view-btn" onclick="switchMobileView('preview')">
+          👁️ Ver Hoja A4
+        </button>
+      </div>
+
+      <!-- Barra secundaria rápida -->
+      <div class="sub-toolbar no-print">
+        <span style="font-size: 12px; font-weight: 700; color: #475569;">
+          ✨ Sistema de CV Interactivo · Edición en Tiempo Real y Formato A4
+        </span>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-blue" onclick="openModal('modal-upload-cv')" style="font-size: 11px;">
+            📤 Cargar Archivo de CV Antiguo
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="openModal('modal-theme')" style="font-size: 11px;">
+            Cambiar Paleta & Columnas
+          </button>
+        </div>
+      </div>
+
+      <!-- PANEL LATERAL: EDITOR DEL CV (NO PRINT) -->
+      <section class="editor-panel no-print">
+        <!-- Pestañas del Editor -->
+        <div class="editor-tabs">
+          <button type="button" id="tab-btn-profile" class="editor-tab-btn active" onclick="switchEditorTab('profile')">Perfil & Foto</button>
+          <button type="button" id="tab-btn-experience" class="editor-tab-btn" onclick="switchEditorTab('experience')">Experiencia</button>
+          <button type="button" id="tab-btn-education" class="editor-tab-btn" onclick="switchEditorTab('education')">Educación</button>
+          <button type="button" id="tab-btn-skills" class="editor-tab-btn" onclick="switchEditorTab('skills')">Habilidades</button>
+          <button type="button" id="tab-btn-certs" class="editor-tab-btn" onclick="switchEditorTab('certs')">Certificados</button>
+        </div>
+
+        <div class="editor-content">
+          
+          <!-- TAB 1: PERFIL & FOTO -->
+          <div id="tab-pane-profile" class="editor-tab-pane" style="display: block;">
+            
+            <!-- Foto de perfil -->
+            <div style="background: #f8fafc; border: 1px solid var(--cv-border); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span class="form-label" style="margin: 0;">Foto de Perfil</span>
+                <label style="font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  <input type="checkbox" id="input-show-photo" onchange="updateProfileField('showPhoto', this.checked)">
+                  <span>Mostrar foto en CV</span>
+                </label>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <label class="btn btn-secondary" style="font-size: 11px; cursor: pointer;">
+                  📁 Subir Foto Propia
+                  <input type="file" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+                </label>
+                <button type="button" class="btn btn-secondary" style="font-size: 11px;" onclick="setPresetPhoto('/src/assets/images/avatar_tech_lead_1792986076800.jpg')">
+                  Retrato (A)
+                </button>
+                <button type="button" class="btn btn-secondary" style="font-size: 11px;" onclick="setPresetPhoto('/src/assets/images/avatar_product_engineer_1792986076261.jpg')">
+                  Retrato (B)
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Nombre Completo</label>
+              <input type="text" id="input-name" class="form-input" oninput="updateProfileField('name', this.value)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Puesto Objetivo / Especialidad</label>
+              <input type="text" id="input-role" class="form-input" oninput="updateProfileField('targetRole', this.value)">
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Email Profesional</label>
+                <input type="email" id="input-email" class="form-input" oninput="updateProfileField('email', this.value)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teléfono</label>
+                <input type="text" id="input-phone" class="form-input" oninput="updateProfileField('phone', this.value)">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Ubicación</label>
+                <input type="text" id="input-location" class="form-input" oninput="updateProfileField('location', this.value)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">LinkedIn</label>
+                <input type="text" id="input-linkedin" class="form-input" oninput="updateProfileField('linkedin', this.value)">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">GitHub</label>
+                <input type="text" id="input-github" class="form-input" oninput="updateProfileField('github', this.value)">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Web / Portfolio</label>
+                <input type="text" id="input-website" class="form-input" oninput="updateProfileField('website', this.value)">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Resumen Profesional (Bio)</label>
+              <textarea id="input-bio" class="form-textarea" rows="4" oninput="updateProfileField('bio', this.value)"></textarea>
+            </div>
+          </div>
+
+          <!-- TAB 2: EXPERIENCIA -->
+          <div id="tab-pane-experience" class="editor-tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span class="form-label" style="margin: 0;">Historial Laboral</span>
+              <button type="button" class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="addExperience()">+ Añadir Empleo</button>
+            </div>
+            <div id="editor-exp-list"></div>
+          </div>
+
+          <!-- TAB 3: EDUCACIÓN -->
+          <div id="tab-pane-education" class="editor-tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span class="form-label" style="margin: 0;">Estudios Académicos</span>
+              <button type="button" class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="addEducation()">+ Añadir Estudio</button>
+            </div>
+            <div id="editor-edu-list"></div>
+          </div>
+
+          <!-- TAB 4: HABILIDADES -->
+          <div id="tab-pane-skills" class="editor-tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span class="form-label" style="margin: 0;">Categorías de Skills</span>
+            </div>
+            <div id="editor-skills-list"></div>
+          </div>
+
+          <!-- TAB 5: CERTIFICADOS -->
+          <div id="tab-pane-certs" class="editor-tab-pane" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span class="form-label" style="margin: 0;">Certificaciones</span>
+              <button type="button" class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="addCertification()">+ Añadir Certificado</button>
+            </div>
+            <div id="editor-certs-list"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VISTA DEL DOCUMENTO CV A4 (IMPRIMIBLE Y EXPORTABLE) -->
+      <section class="cv-preview-wrapper">
+        <div class="cv-viewport-bar no-print">
+          <span style="font-weight: 600;">📄 Vista Hoja A4 para PDF</span>
+          <span>Presiona "Descargar PDF" para exportar en alta resolución</span>
+        </div>
+
+        <!-- EL DOCUMENTO CV -->
+        <article class="a4-sheet two-column-layout" id="cv-printable-area">
+          <!-- Renderizado dinámicamente por app.js -->
+        </article>
+      </section>
+
+    </div>
+
+    <!-- BOTÓN FLOTANTE DIRECTO DE DESCARGA PDF -->
+    <div class="floating-download no-print">
+      <button type="button" class="btn-float" onclick="downloadPdf()">
+        📥 Descargar PDF
+      </button>
+    </div>
+
+    <!-- MODAL: SUBIR Y MEJORAR CV ANTIGUO (ARCHIVO O TEXTO) -->
+    <div class="modal-overlay" id="modal-upload-cv">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">🚀 Subir y Mejorar tu CV Antiguo</div>
+          <button type="button" class="modal-close" onclick="closeModal('modal-upload-cv')">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 12px; color: #475569; margin-bottom: 14px; line-height: 1.5;">
+            Sube el archivo de tu currículum anterior (o pega su contenido) y el algoritmo de reclutamiento <strong>reestructurará los datos, enriquecerá los logros con verbos de acción y detectará tus tecnologías automáticamente</strong>.
+          </p>
+
+          <!-- Zona de Drag and Drop para subir archivo -->
+          <div
+            id="cv-dropzone"
+            class="dropzone-container"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleOldCvDrop(event)"
+            onclick="document.getElementById('file-old-cv').click()"
+          >
+            <div class="dropzone-icon">📂</div>
+            <div class="dropzone-title">Arrastra tu archivo de CV aquí o haz clic para subir</div>
+            <div class="dropzone-desc">Formatos compatibles: .txt, .md, .json, .pdf, .docx</div>
+            <input
+              type="file"
+              id="file-old-cv"
+              style="display: none;"
+              accept=".txt,.md,.json,.pdf,.doc,.docx"
+              onchange="handleOldCvFile(event)"
+            >
+          </div>
+
+          <div id="upload-status-msg" style="display: none; font-size: 11.5px; font-weight: 600; color: #2563eb; margin-bottom: 12px; text-align: center;"></div>
+
+          <!-- Opción alternativa: Pegar texto -->
+          <div style="margin-top: 10px;">
+            <label class="form-label">O pega el texto / apuntes de tu CV viejo aquí:</label>
+            <textarea
+              id="old-cv-textarea"
+              class="form-textarea"
+              rows="7"
+              placeholder="Ejemplo:&#10;María González&#10;Desarrolladora Frontend&#10;maria@email.com | +34 600 111 222&#10;&#10;EXPERIENCIA:&#10;Empresa ABC (2021 - 2024)&#10;- Me encargaba de hacer la web en React&#10;- Trabajé en mejorar el diseño y optimizar la base de datos...&#10;&#10;HABILIDADES:&#10;JavaScript, React, CSS, Git, Figma"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-upload-cv')">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="enhancePastedOldCv()">✨ Mejorar y Aplicar al CV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: AUDITORÍA ATS -->
+    <div class="modal-overlay" id="modal-ats">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">✓ Diagnóstico ATS & Reclutador Técnico</div>
+          <button type="button" class="modal-close" onclick="closeModal('modal-ats')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; text-align: center;">
+            <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px;">
+              <span style="font-size: 10px; font-weight: 700; color: #065f46; text-transform: uppercase;">Puntuación ATS</span>
+              <div style="font-size: 26px; font-weight: 800; color: #047857;" id="modal-ats-score">85</div>
+              <span style="font-size: 10px; color: #059669;">/ 100 Puntos</span>
+            </div>
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px;">
+              <span style="font-size: 10px; font-weight: 700; color: #1e40af; text-transform: uppercase;">Verbos Acción</span>
+              <div style="font-size: 26px; font-weight: 800; color: #2563eb;" id="modal-ats-actions">6</div>
+              <span style="font-size: 10px; color: #3b82f6;">Detectados</span>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid var(--cv-border); border-radius: 8px; padding: 12px;">
+              <span style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase;">Métricas Cuantitativas</span>
+              <div style="font-size: 26px; font-weight: 800; color: #0f172a;" id="modal-ats-metrics">4</div>
+              <span style="font-size: 10px; color: #64748b;">(%, $, cifras)</span>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: #334155; line-height: 1.5;">
+            <strong>Recomendaciones para maximizar entrevistas:</strong>
+            <ul style="padding-left: 18px; margin-top: 6px;">
+              <li>Inicia cada viñeta de empleo con un verbo resolutivo (*Lideró, Optimizó, Arquitectó*).</li>
+              <li>Incluye métricas de negocio comprobables (ej. *redujo latencia en 44%*, *1.8M usuarios*).</li>
+              <li>Asegúrate de que tus datos de contacto y perfil de LinkedIn estén actualizados.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="closeModal('modal-ats')">Entendido</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: PERSONALIZACIÓN DE ESTILOS -->
+    <div class="modal-overlay" id="modal-theme">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">🎨 Paleta de Colores & Estructura</div>
+          <button type="button" class="modal-close" onclick="closeModal('modal-theme')">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Paleta de Colores (:root Variables)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button type="button" class="btn btn-secondary" onclick="setTheme('slate')">🟦 Slate Navy</button>
+              <button type="button" class="btn btn-secondary" onclick="setTheme('emerald')">🟩 Emerald Executive</button>
+              <button type="button" class="btn btn-secondary" onclick="setTheme('indigo')">🟪 Modern Indigo</button>
+              <button type="button" class="btn btn-secondary" onclick="setTheme('monochrome')">⬛ Editorial Minimal</button>
+              <button type="button" class="btn btn-secondary" onclick="setTheme('amber')">🟧 Warm Amber</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 14px;">
+            <label class="form-label">Estructura del Currículum</label>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary" onclick="setLayout('two-column')">2 Columnas (Sidebar + Main)</button>
+              <button type="button" class="btn btn-secondary" onclick="setLayout('single-column')">1 Columna (Clásico Corrido)</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 14px;">
+            <label class="form-label">Fondo de Barra Lateral</label>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary" onclick="setSidebarTone('dark')">Barra Oscura Contrastada</button>
+              <button type="button" class="btn btn-secondary" onclick="setSidebarTone('light')">Barra Clara Minimalista</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="closeModal('modal-theme')">Listo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script Principal JavaScript Vanilla -->
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

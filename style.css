@@ -1,0 +1,1055 @@
+/* ==========================================================================
+   CV STUDIO PRO - ESTILOS CSS3 AVANZADOS Y ULTRA-RESPONSIVOS
+   Diseño adaptativo Mobile-First, Variables CSS (:root) y formato A4 nativo
+   ========================================================================== */
+
+/* 1. PALETAS Y VARIABLES CSS (:root y Scoped para exportación html2pdf/canvas) */
+:root,
+#cv-printable-area,
+#cv-document,
+.a4-sheet {
+  --cv-bg: #f8fafc;
+  --cv-card: #ffffff;
+  --cv-card-subtle: #f1f5f9;
+  --cv-border: #e2e8f0;
+  --cv-text-main: #0f172a;
+  --cv-text-muted: #475569;
+  --cv-text-light: #64748b;
+  --cv-accent: #2563eb;
+  --cv-accent-hover: #1d4ed8;
+  --cv-accent-subtle: #eff6ff;
+  --cv-sidebar-bg: #0f172a;
+  --cv-sidebar-text: #f8fafc;
+  --cv-sidebar-muted: #94a3b8;
+  --cv-sidebar-border: #334155;
+  --cv-tag-bg: #e0f2fe;
+  --cv-tag-text: #0369a1;
+  
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+}
+
+/* Temas de Color Dinámicos - Compatibles con scope de aislamiento de html2canvas */
+[data-theme="emerald"],
+#cv-printable-area[data-theme="emerald"],
+#cv-document[data-theme="emerald"] {
+  --cv-accent: #059669;
+  --cv-accent-hover: #047857;
+  --cv-accent-subtle: #ecfdf5;
+  --cv-sidebar-bg: #064e3b;
+  --cv-sidebar-text: #f0fdf4;
+  --cv-sidebar-muted: #a7f3d0;
+}
+
+[data-theme="indigo"],
+#cv-printable-area[data-theme="indigo"],
+#cv-document[data-theme="indigo"] {
+  --cv-accent: #4f46e5;
+  --cv-accent-hover: #4338ca;
+  --cv-accent-subtle: #eef2ff;
+  --cv-sidebar-bg: #1e1b4b;
+  --cv-sidebar-text: #f5f3ff;
+  --cv-sidebar-muted: #c7d2fe;
+}
+
+[data-theme="monochrome"],
+#cv-printable-area[data-theme="monochrome"],
+#cv-document[data-theme="monochrome"] {
+  --cv-accent: #18181b;
+  --cv-accent-hover: #27272a;
+  --cv-accent-subtle: #f4f4f5;
+  --cv-sidebar-bg: #18181b;
+  --cv-sidebar-text: #fafafa;
+  --cv-sidebar-muted: #a1a1aa;
+}
+
+[data-theme="amber"],
+#cv-printable-area[data-theme="amber"],
+#cv-document[data-theme="amber"] {
+  --cv-accent: #d97706;
+  --cv-accent-hover: #b45309;
+  --cv-accent-subtle: #fffbeb;
+  --cv-sidebar-bg: #1c1917;
+  --cv-sidebar-text: #fafaf9;
+  --cv-sidebar-muted: #a8a29e;
+}
+
+[data-sidebar="light"],
+#cv-printable-area[data-sidebar="light"],
+#cv-document[data-sidebar="light"] {
+  --cv-sidebar-bg: #ffffff;
+  --cv-sidebar-text: #0f172a;
+  --cv-sidebar-muted: #64748b;
+  --cv-sidebar-border: #e2e8f0;
+}
+
+/* 2. RESET Y TIPOGRAFÍA BASE */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-body);
+  color: var(--cv-text-main);
+  background-color: var(--cv-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* 3. BARRA SUPERIOR (TOPBAR CONTRACT) */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--cv-border);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .topbar {
+    padding: 12px 24px;
+    gap: 20px;
+  }
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--cv-text-main);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand-wordmark span {
+  color: var(--cv-accent);
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .nav-controls {
+    gap: 8px;
+  }
+}
+
+/* Botones y Controles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease-in-out;
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.btn-primary {
+  background-color: var(--cv-accent);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: var(--cv-accent-hover);
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--cv-text-main);
+  border-color: var(--cv-border);
+}
+.btn-secondary:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btn-emerald {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.btn-emerald:hover {
+  background-color: #d1fae5;
+}
+
+.btn-blue {
+  background-color: var(--cv-accent-subtle);
+  color: var(--cv-accent);
+  border-color: #bfdbfe;
+}
+.btn-blue:hover {
+  background-color: #dbeafe;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+.badge-emerald {
+  background: #10b981;
+  color: white;
+}
+
+/* 4. SWITCHER RESPONSIVE (MÓVIL / TABLET / ESCRITORIO) */
+.mobile-view-toggle {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cv-border);
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .mobile-view-toggle {
+    display: none; /* En escritorio se muestra pantalla dividida simultánea */
+  }
+}
+
+.mobile-view-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: var(--cv-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.mobile-view-btn.active {
+  background: white;
+  color: var(--cv-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 5. WORKSPACE CONTAINER (SPLIT SCREEN ULTRA-RESPONSIVO) */
+.workspace-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .workspace-container {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    padding: 20px;
+    align-items: start;
+    gap: 24px;
+  }
+}
+
+/* Barra secundaria rápida */
+.sub-toolbar {
+  grid-column: 1 / -1;
+  background: white;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cv-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 6. PANEL EDITOR DE CV */
+.editor-panel {
+  background: white;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .editor-panel {
+    position: sticky;
+    top: 75px;
+    max-height: calc(100vh - 95px);
+  }
+}
+
+.editor-tabs {
+  display: flex;
+  overflow-x: auto;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--cv-border);
+  padding: 6px;
+  gap: 4px;
+  scrollbar-width: none;
+}
+.editor-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.editor-tab-btn {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--cv-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.editor-tab-btn.active {
+  background: white;
+  color: var(--cv-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.editor-content {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cv-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 9px 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--cv-text-main);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--cv-accent);
+  box-shadow: 0 0 0 2px var(--cv-accent-subtle);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+@media (min-width: 480px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+.item-card {
+  background: #f8fafc;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.item-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 13px;
+  transition: color 0.15s;
+}
+.delete-btn:hover {
+  color: #ef4444;
+}
+
+/* 7. HOJA DE CV FORMATO A4 (ULTRA-RESPONSIVO CON TRANSICIONES SUAVES) */
+@keyframes cvFadeSlideUp {
+  0% {
+    opacity: 0.15;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-animated-section {
+  animation: cvFadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Modo especial para captura de PDF - Desactiva animaciones y asegura 100% de opacidad y visibilidad */
+.rendering-pdf-mode,
+.rendering-pdf-mode * {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  will-change: auto !important;
+}
+
+.rendering-pdf-mode {
+  width: 794px !important;
+  max-width: 794px !important;
+  min-height: 1123px !important;
+  background-color: #ffffff !important;
+  display: flex !important;
+  flex-direction: row !important;
+  box-sizing: border-box !important;
+}
+
+.rendering-pdf-mode aside.cv-sidebar {
+  width: 35% !important;
+  min-width: 250px !important;
+  flex-shrink: 0 !important;
+  padding: 32px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.rendering-pdf-mode main.cv-main {
+  flex: 1 !important;
+  width: 65% !important;
+  padding: 32px 30px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #ffffff !important;
+}
+
+.a4-sheet section {
+  animation: cvFadeSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cv-name,
+.cv-role,
+.cv-bio,
+.timeline-entry,
+.edu-row,
+.skill-bar-fill,
+.sidebar-list li {
+  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.cv-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.cv-viewport-bar {
+  width: 100%;
+  max-width: 210mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: #64748b;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Hoja A4 con Contenedor Elástico */
+.a4-sheet {
+  width: 100%;
+  max-width: 210mm;
+  min-height: 297mm;
+  background: white;
+  border: 1px solid var(--cv-border);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+@media (min-width: 768px) {
+  .a4-sheet.two-column-layout {
+    flex-direction: row;
+  }
+}
+
+/* ASIDE (Columna Lateral) */
+.a4-sheet aside.cv-sidebar {
+  background: var(--cv-sidebar-bg);
+  color: var(--cv-sidebar-text);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .a4-sheet.two-column-layout aside.cv-sidebar {
+    width: 36%;
+    min-width: 250px;
+    flex-shrink: 0;
+    padding: 32px 24px;
+  }
+}
+
+.cv-photo-wrapper {
+  text-align: center;
+}
+
+.cv-photo {
+  width: 115px;
+  height: 115px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
+}
+
+.sidebar-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cv-sidebar-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.sidebar-list {
+  list-style: none;
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  word-break: break-all;
+}
+
+.sidebar-list a {
+  color: var(--cv-sidebar-text);
+  text-decoration: none;
+}
+.sidebar-list a:hover {
+  text-decoration: underline;
+}
+
+/* Habilidades en Sidebar */
+.skill-group {
+  margin-bottom: 12px;
+}
+.skill-group-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+}
+.skill-bar-row {
+  margin-bottom: 5px;
+}
+.skill-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.skill-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 2px;
+}
+.skill-bar-fill {
+  height: 100%;
+  background: var(--cv-accent);
+  border-radius: var(--radius-full);
+}
+
+/* MAIN (Cuerpo Principal del CV) */
+.a4-sheet main.cv-main {
+  flex: 1;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: white;
+}
+
+@media (min-width: 768px) {
+  .a4-sheet main.cv-main {
+    padding: 32px 30px;
+    gap: 20px;
+  }
+}
+
+.cv-header-title {
+  border-bottom: 1px solid var(--cv-border);
+  padding-bottom: 14px;
+}
+
+.cv-name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--cv-text-main);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  .cv-name {
+    font-size: 28px;
+  }
+}
+
+.cv-role {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--cv-accent);
+  margin-top: 3px;
+}
+
+.main-section-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cv-text-muted);
+  border-bottom: 1px solid var(--cv-border);
+  padding-bottom: 5px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.section-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--cv-accent);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.cv-bio {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* Timeline Experiencia */
+.timeline-entry {
+  position: relative;
+  padding: 6px 10px 8px 18px;
+  border-left: 2px solid var(--cv-border);
+  margin-bottom: 16px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+  transform-origin: left center;
+}
+
+.timeline-entry:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  background-color: rgba(248, 250, 252, 0.85);
+}
+
+.timeline-entry::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cv-accent);
+  border: 2px solid white;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.entry-role {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cv-text-main);
+}
+
+.role-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: var(--cv-accent-subtle);
+  color: var(--cv-accent);
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.role-icon {
+  width: 11px;
+  height: 11px;
+}
+
+.entry-company {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--cv-accent);
+}
+
+.entry-dates {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cv-text-light);
+  white-space: nowrap;
+}
+
+.entry-summary {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #475569;
+  margin: 3px 0;
+}
+
+.entry-bullets {
+  list-style: disc;
+  padding-left: 16px;
+  font-size: 11.5px;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.tech-tag {
+  font-size: 10px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Educación */
+.edu-row {
+  margin-bottom: 12px;
+}
+.edu-degree {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cv-text-main);
+}
+.edu-school {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* 8. DRAG & DROP ZONE (SUBIDA DE CV ANTIGUO) */
+.dropzone-container {
+  border: 2px dashed #93c5fd;
+  background-color: #f0f7ff;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 16px;
+}
+.dropzone-container:hover, .dropzone-container.dragover {
+  border-color: var(--cv-accent);
+  background-color: #e0f2fe;
+  transform: scale(1.01);
+}
+.dropzone-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.dropzone-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.dropzone-desc {
+  font-size: 11px;
+  color: #3b82f6;
+  margin-top: 2px;
+}
+
+/* 9. MODALES */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 620px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--cv-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+}
+
+.modal-header {
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--cv-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cv-text-main);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+}
+.modal-close:hover {
+  color: #0f172a;
+}
+
+.modal-body {
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-top: 1px solid var(--cv-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 10. BOTÓN FLOTANTE DE DESCARGA PDF */
+.floating-download {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 40;
+}
+
+.btn-float {
+  background: var(--cv-accent);
+  color: white;
+  padding: 12px 18px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
+  border: none;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-float:hover {
+  background: var(--cv-accent-hover);
+  transform: translateY(-2px);
+}
+
+/* 11. REGLAS NATIVAS @media print (A4 EXACTO) */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print,
+  .topbar,
+  .sub-toolbar,
+  .mobile-view-toggle,
+  .editor-panel,
+  .floating-download,
+  .modal-overlay,
+  button {
+    display: none !important;
+  }
+
+  .workspace-container {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .cv-preview-wrapper {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #cv-printable-area,
+  #cv-document,
+  .a4-sheet {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    background: #ffffff !important;
+  }
+
+  #cv-printable-area aside.cv-sidebar,
+  #cv-document aside.cv-sidebar,
+  .a4-sheet aside.cv-sidebar {
+    width: 35% !important;
+    min-width: 250px !important;
+    flex-shrink: 0 !important;
+    padding: 32px 24px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #cv-printable-area main.cv-main,
+  #cv-document main.cv-main,
+  .a4-sheet main.cv-main {
+    flex: 1 !important;
+    padding: 32px 30px !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .page-break-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}

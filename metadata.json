@@ -1,0 +1,6 @@
+{
+  "name": "CV Studio Pro - Sistema de Currículum Vitae Interactivo y PDF",
+  "description": "Sistema profesional de creación, diseño y exportación de Currículum Vitae interactivo, ultra-responsivo y optimizado para reclutadores y ATS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+:root {
+  --cv-bg: #f8fafc;
+  --cv-card: #ffffff;
+  --cv-card-muted: #f1f5f9;
+  --cv-border: #e2e8f0;
+  --cv-text-primary: #0f172a;
+  --cv-text-secondary: #475569;
+  --cv-text-muted: #64748b;
+  --cv-accent: #2563eb;
+  --cv-accent-hover: #1d4ed8;
+  --cv-accent-subtle: #eff6ff;
+  --cv-accent-text: #1d4ed8;
+  --cv-sidebar-bg: #0f172a;
+  --cv-sidebar-text: #f8fafc;
+  --cv-sidebar-muted: #94a3b8;
+  --cv-sidebar-card: #1e293b;
+  --cv-sidebar-border: #334155;
+  --cv-tag-bg: #e0f2fe;
+  --cv-tag-text: #0369a1;
+  --cv-badge-bg: #f1f5f9;
+  --cv-badge-text: #334155;
+}
+
+/* Emerald Theme */
+[data-theme="emerald"] {
+  --cv-accent: #059669;
+  --cv-accent-hover: #047857;
+  --cv-accent-subtle: #ecfdf5;
+  --cv-accent-text: #047857;
+  --cv-sidebar-bg: #064e3b;
+  --cv-sidebar-text: #f0fdf4;
+  --cv-sidebar-muted: #a7f3d0;
+  --cv-sidebar-card: #04382a;
+  --cv-sidebar-border: #065f46;
+  --cv-tag-bg: #d1fae5;
+  --cv-tag-text: #065f46;
+}
+
+/* Indigo Modern Theme */
+[data-theme="indigo"] {
+  --cv-accent: #4f46e5;
+  --cv-accent-hover: #4338ca;
+  --cv-accent-subtle: #eef2ff;
+  --cv-accent-text: #4338ca;
+  --cv-sidebar-bg: #1e1b4b;
+  --cv-sidebar-text: #f5f3ff;
+  --cv-sidebar-muted: #c7d2fe;
+  --cv-sidebar-card: #2e2874;
+  --cv-sidebar-border: #3730a3;
+  --cv-tag-bg: #e0e7ff;
+  --cv-tag-text: #3730a3;
+}
+
+/* Editorial Minimalist Theme (Clean Black & Sand) */
+[data-theme="monochrome"] {
+  --cv-accent: #18181b;
+  --cv-accent-hover: #27272a;
+  --cv-accent-subtle: #f4f4f5;
+  --cv-accent-text: #18181b;
+  --cv-sidebar-bg: #18181b;
+  --cv-sidebar-text: #fafafa;
+  --cv-sidebar-muted: #a1a1aa;
+  --cv-sidebar-card: #27272a;
+  --cv-sidebar-border: #3f3f46;
+  --cv-tag-bg: #f4f4f5;
+  --cv-tag-text: #27272a;
+}
+
+/* Amber Warm Executive */
+[data-theme="amber"] {
+  --cv-accent: #d97706;
+  --cv-accent-hover: #b45309;
+  --cv-accent-subtle: #fffbeb;
+  --cv-accent-text: #b45309;
+  --cv-sidebar-bg: #1c1917;
+  --cv-sidebar-text: #fafaf9;
+  --cv-sidebar-muted: #a8a29e;
+  --cv-sidebar-card: #292524;
+  --cv-sidebar-border: #44403c;
+  --cv-tag-bg: #fef3c7;
+  --cv-tag-text: #92400e;
+}
+
+/* Light / Executive White Sidebar Mode */
+[data-sidebar="light"] {
+  --cv-sidebar-bg: #ffffff;
+  --cv-sidebar-text: #0f172a;
+  --cv-sidebar-muted: #64748b;
+  --cv-sidebar-card: #f8fafc;
+  --cv-sidebar-border: #e2e8f0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Timeline vertical track */
+.timeline-track {
+  position: relative;
+}
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 17px;
+  width: 2px;
+  background: #e2e8f0;
+}
+[data-sidebar="dark"] .timeline-track::before {
+  background: #e2e8f0;
+}
+
+/* Smooth transitions (fade-in / slide-up) */
+@keyframes cvFadeSlideUp {
+  0% {
+    opacity: 0.15;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-animated-section {
+  animation: cvFadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.a4-document-sheet section {
+  animation: cvFadeSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.a4-document-sheet * {
+  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* A4 Sheet Preview Constraints */
+.a4-document-sheet {
+  width: 100%;
+  max-width: 210mm;
+  min-height: 297mm;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* Print Specific Rules */
+@page {
+  size: A4 portrait;
+  margin: 8mm 8mm;
+}
+
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print,
+  nav,
+  header.app-topbar,
+  .editor-pane,
+  .floating-actions,
+  button,
+  .tooltip {
+    display: none !important;
+  }
+
+  .a4-document-sheet {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .page-break-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .cv-content-container {
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}
